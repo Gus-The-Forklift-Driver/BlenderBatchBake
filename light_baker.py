@@ -1,7 +1,7 @@
 import bpy
 
 
-def bake_maps(image_size=(1024, 1024)) -> None:
+def bake_maps(image_size=(1024, 1024), out_filepath='//backedMaps/') -> None:
 
     # store seleced objects
     selected_object = bpy.context.selected_objects
@@ -35,7 +35,7 @@ def bake_maps(image_size=(1024, 1024)) -> None:
                 nodes.active = img_node
 
                 # save image
-                img.filepath = f'//bakedMaps/{object.name}_{material.name}.png'
+                img.filepath = f'{out_filepath}{object.name}_{material.name}.png'
                 img.save()
                 # save and bake
                 print(bpy.context.view_layer.objects.active)

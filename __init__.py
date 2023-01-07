@@ -31,13 +31,14 @@ class bake_maps(bpy.types.Operator):
 
     def execute(self, context):
         size = context.scene.BLB.image_size
-        light_baker.bake_maps(image_size=(size, size))
+        filepath = context.scene.BLB.filepath
+        light_baker.bake_maps(image_size=(size, size), out_filepath=filepath)
         return {'FINISHED'}
 
 
 class interface(bpy.types.Panel):
     """create a panel"""
-    bl_label = "Tools"
+    bl_label = "Blender Light Baker"
     bl_idname = "VIEW3D_PT_settings"
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"
@@ -51,6 +52,7 @@ class interface(bpy.types.Panel):
             #layout.label(text='bake lights')
 
             layout.operator('batch_light_bake.bake_maps')
+            layout.prop(scene.BLB, 'filepath')
 
             layout.prop(scene.cycles, 'device')
 
@@ -72,6 +74,8 @@ class interface(bpy.types.Panel):
             else:
                 col.prop(cscene, "samples", text="Samples")
             col.prop(cscene, "time_limit")
+
+            layout.prop(cscene, 'max_bounces')
 
             # denoiser
 
@@ -130,6 +134,8 @@ class interface(bpy.types.Panel):
 
 class BLBProperties(bpy.types.PropertyGroup):
     image_size: bpy.props.IntProperty(name='image_size', default=1024)
+    filepath: bpy.props.StringProperty(
+        name='filepath', default='//backedMaps/')
 
 
 CLASSES = [

@@ -2,23 +2,23 @@ import bpy
 from . import light_baker
 
 bl_info = {
-    "name": "BatchLightBaker",
-    "author": "Smonking_Sheep",
-    "description": "Allows you to bake maps in batch",
-    "blender": (3, 4, 1),
-    "version": (0, 0, 2),
-    "location": "View3D > side panel > BLB",
-    "warning": "",
-    "doc_url": "https://github.com/Gus-The-Forklift-Driver/BlenderBatchBake",
-    "tracker_url": "https://github.com/Gus-The-Forklift-Driver/BlenderBatchBake/issues",
-    "category": "MapBaking",
-    "support": "COMMUNITY",
+    'name': 'BatchLightBaker',
+    'author': 'Smonking_Sheep',
+    'description': 'Allows you to bake maps in batch',
+    'blender': (3, 4, 1),
+    'version': (0, 0, 2),
+    'location': 'View3D > side panel > BLB',
+    'warning': '',
+    'doc_url': 'https://github.com/Gus-The-Forklift-Driver/BlenderBatchBake',
+    'tracker_url': 'https://github.com/Gus-The-Forklift-Driver/BlenderBatchBake/issues',
+    'category': 'MapBaking',
+    'support': 'COMMUNITY',
 }
 
 
 class helloWorld(bpy.types.Operator):
-    bl_idname = "object.hello_world"
-    bl_label = "Print Hello World"
+    bl_idname = 'object.hello_world'
+    bl_label = 'Print Hello World'
     bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context):
@@ -27,9 +27,9 @@ class helloWorld(bpy.types.Operator):
 
 class bake_maps(bpy.types.Operator):
     '''Bake the maps of the selected objects'''
-    bl_idname = "batch_light_bake.bake_maps"
-    bl_space_type = "VIEW_3D"
-    bl_label = "bake maps of selected objects"
+    bl_idname = 'batch_light_bake.bake_maps'
+    bl_space_type = 'VIEW_3D'
+    bl_label = 'bake maps of selected objects'
     bl_options = {'REGISTER'}
 
     def execute(self, context):
@@ -40,12 +40,12 @@ class bake_maps(bpy.types.Operator):
 
 
 class interface(bpy.types.Panel):
-    """create a panel"""
-    bl_label = "Blender Light Baker"
-    bl_idname = "VIEW3D_PT_settings"
-    bl_space_type = "VIEW_3D"
-    bl_region_type = "UI"
-    bl_category = "BLB"
+    '''create a panel'''
+    bl_label = 'Blender Light Baker'
+    bl_idname = 'VIEW3D_PT_settings'
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_category = 'BLB'
 
     def draw(self, context):
         if context.scene.render.engine != 'BLENDER_EEVEE':
@@ -63,20 +63,20 @@ class interface(bpy.types.Panel):
             layout.use_property_split = True
             layout.use_property_decorate = False
 
-            heading = layout.column(align=True, heading="Noise Threshold")
+            heading = layout.column(align=True, heading='Noise Threshold')
             row = heading.row(align=True)
-            row.prop(cscene, "use_adaptive_sampling", text="")
+            row.prop(cscene, 'use_adaptive_sampling', text='')
             sub = row.row()
             sub.active = cscene.use_adaptive_sampling
-            sub.prop(cscene, "adaptive_threshold", text="")
+            sub.prop(cscene, 'adaptive_threshold', text='')
 
             col = layout.column(align=True)
             if cscene.use_adaptive_sampling:
-                col.prop(cscene, "samples", text="Max Samples")
-                col.prop(cscene, "adaptive_min_samples", text="Min Samples")
+                col.prop(cscene, 'samples', text='Max Samples')
+                col.prop(cscene, 'adaptive_min_samples', text='Min Samples')
             else:
-                col.prop(cscene, "samples", text="Samples")
-            col.prop(cscene, "time_limit")
+                col.prop(cscene, 'samples', text='Samples')
+            col.prop(cscene, 'time_limit')
 
             layout.prop(cscene, 'max_bounces')
 
@@ -86,7 +86,7 @@ class interface(bpy.types.Panel):
             col.active = cscene.use_denoising
             col.prop(cscene, 'use_denoising')
             if col.active:
-                col.prop(cscene, "denoiser", text="Denoiser")
+                col.prop(cscene, 'denoiser', text='Denoiser')
 
             layout.label(text='Settings :')
             layout.prop(scene.BLB, 'image_size')
@@ -97,31 +97,31 @@ class interface(bpy.types.Panel):
             col = layout.column()
 
             if cscene.bake_type == 'NORMAL':
-                col.prop(cbk, "normal_space", text="Space")
+                col.prop(cbk, 'normal_space', text='Space')
 
                 sub = col.column(align=True)
-                sub.prop(cbk, "normal_r", text="Swizzle R")
-                sub.prop(cbk, "normal_g", text="G")
-                sub.prop(cbk, "normal_b", text="B")
+                sub.prop(cbk, 'normal_r', text='Swizzle R')
+                sub.prop(cbk, 'normal_g', text='G')
+                sub.prop(cbk, 'normal_b', text='B')
 
             elif cscene.bake_type == 'COMBINED':
 
-                col = layout.column(heading="Lighting", align=True)
-                col.prop(cbk, "use_pass_direct")
-                col.prop(cbk, "use_pass_indirect")
+                col = layout.column(heading='Lighting', align=True)
+                col.prop(cbk, 'use_pass_direct')
+                col.prop(cbk, 'use_pass_indirect')
 
-                col = layout.column(heading="Contributions", align=True)
+                col = layout.column(heading='Contributions', align=True)
                 col.active = cbk.use_pass_direct or cbk.use_pass_indirect
-                col.prop(cbk, "use_pass_diffuse")
-                col.prop(cbk, "use_pass_glossy")
-                col.prop(cbk, "use_pass_transmission")
-                col.prop(cbk, "use_pass_emit")
+                col.prop(cbk, 'use_pass_diffuse')
+                col.prop(cbk, 'use_pass_glossy')
+                col.prop(cbk, 'use_pass_transmission')
+                col.prop(cbk, 'use_pass_emit')
 
             elif cscene.bake_type in {'DIFFUSE', 'GLOSSY', 'TRANSMISSION'}:
-                col = layout.column(heading="Contributions", align=True)
-                col.prop(cbk, "use_pass_direct")
-                col.prop(cbk, "use_pass_indirect")
-                col.prop(cbk, "use_pass_color")
+                col = layout.column(heading='Contributions', align=True)
+                col.prop(cbk, 'use_pass_direct')
+                col.prop(cbk, 'use_pass_indirect')
+                col.prop(cbk, 'use_pass_color')
 
             # margin
             layout.label(text='Margin :')

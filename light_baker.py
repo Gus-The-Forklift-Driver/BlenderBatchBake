@@ -46,11 +46,20 @@ def bake_maps(image_size=(1024, 1024), out_filepath='//backedMaps/') -> None:
                 nodes.active = img_node
 
                 # save image
-                img.filepath = f'{out_filepath}{object.name}_{material.name}.png'
-                img.save()
+                img.filepath = f'{out_filepath}{object.name}_{material.name}.hdr'
+                # img.save()
                 # save and bake
                 # print(bpy.context.view_layer.objects.active)
-                bpy.ops.object.bake()
+
+                cbs = bpy.context.scene.render.bake
+                bpy.ops.object.bake(type=bpy.context.scene.cycles.bake_type,
+                                    pass_filter=cbs.pass_filter,
+                                    margin=cbs.margin,
+                                    margin_type=cbs.margin_type,
+                                    normal_space=cbs.normal_space,
+                                    normal_r=cbs.normal_r,
+                                    normal_g=cbs.normal_g,
+                                    normal_b=cbs.normal_b)
                 img.save()
 
             bpy.ops.object.select_all(action='DESELECT')

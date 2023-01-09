@@ -5,7 +5,8 @@ def bake_maps(image_size=(1024, 1024), out_filepath='//backedMaps/') -> None:
 
     # store seleced objects
     selected_object = bpy.context.selected_objects
-    print(selected_object)
+    # print(selected_object)
+
     # deselect all objects
     bpy.ops.object.select_all(action='DESELECT')
     bpy.context.view_layer.objects.active = None
@@ -29,11 +30,13 @@ def bake_maps(image_size=(1024, 1024), out_filepath='//backedMaps/') -> None:
                     if node.name == 'Baked_Image':
                         img_node = node
 
-                # create  new image
-                img = bpy.data.images.new(
-                    name=f'{object.name}_{material.name}', width=image_size[0], height=image_size[1], alpha=True)
+                if bpy.data.images.find(f'{object.name}_{material.name}') == -1:
+                    # create  new image
+                    img = bpy.data.images.new(name=f'{object.name}_{material.name}', width=image_size[0], height=image_size[1], alpha=True)
+                else:
+                    img = bpy.data.images.get(f'{object.name}_{material.name}')
 
-                # setup new image node
+                    # setup new image node
                 if img_node == None:
                     img_node = nodes.new('ShaderNodeTexImage')
                     img_node.name = 'Baked_Image'
@@ -46,7 +49,7 @@ def bake_maps(image_size=(1024, 1024), out_filepath='//backedMaps/') -> None:
                 img.filepath = f'{out_filepath}{object.name}_{material.name}.png'
                 img.save()
                 # save and bake
-                print(bpy.context.view_layer.objects.active)
+                # print(bpy.context.view_layer.objects.active)
                 bpy.ops.object.bake()
                 img.save()
 

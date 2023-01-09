@@ -4,12 +4,14 @@ from . import light_baker
 bl_info = {
     "name": "BatchLightBaker",
     "author": "Smonking_Sheep",
-    "description": "",
-    "blender": (3, 2, 1),
-    "version": (0, 0, 1),
-    "location": "",
+    "description": "Allows you to bake maps in batch",
+    "blender": (3, 4, 1),
+    "version": (0, 0, 2),
+    "location": "View3D > side panel > BLB",
     "warning": "",
-    "category": "Generic"
+    "doc_url": "https://github.com/Gus-The-Forklift-Driver/BlenderBatchBake",
+    "category": "MapBaking",
+    "support": "COMMUNITY",
 }
 
 

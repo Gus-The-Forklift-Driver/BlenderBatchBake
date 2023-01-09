@@ -10,6 +10,7 @@ bl_info = {
     "location": "View3D > side panel > BLB",
     "warning": "",
     "doc_url": "https://github.com/Gus-The-Forklift-Driver/BlenderBatchBake",
+    "tracker_url": "https://github.com/Gus-The-Forklift-Driver/BlenderBatchBake/issues",
     "category": "MapBaking",
     "support": "COMMUNITY",
 }

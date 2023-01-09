@@ -23,13 +23,21 @@ def bake_maps(image_size=(1024, 1024), out_filepath='//backedMaps/') -> None:
                 material.use_nodes = True
                 nodes = material.node_tree.nodes
 
+                # check if there isnt image nodes already existing
+                img_node = None
+                for node in nodes:
+                    if node.name == 'Baked_Image':
+                        img_node = node
+
                 # create  new image
                 img = bpy.data.images.new(
                     name=f'{object.name}_{material.name}', width=image_size[0], height=image_size[1], alpha=True)
 
                 # setup new image node
-                img_node = nodes.new('ShaderNodeTexImage')
-                img_node.name = 'Baked Image'
+                if img_node == None:
+                    img_node = nodes.new('ShaderNodeTexImage')
+                    img_node.name = 'Baked_Image'
+
                 img_node.image = img
                 img_node.select = True
                 nodes.active = img_node

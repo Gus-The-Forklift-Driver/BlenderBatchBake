@@ -1,4 +1,19 @@
 import bpy
+import time
+import sys
+
+import io
+from contextlib import redirect_stdout
+
+
+def update_progress(job_title, progress):
+    length = 20  # modify this to change the length
+    block = int(round(length*progress))
+    msg = "\r{0}: [{1}] {2}%".format(job_title, "#"*block + "-"*(length-block), round(progress*100, 2))
+    if progress >= 1:
+        msg += " DONE\r\n"
+    sys.stdout.write(msg)
+    sys.stdout.flush()
 
 
 def bake_maps(image_size=(1024, 1024), out_filepath='//backedMaps/') -> None:
@@ -10,7 +25,9 @@ def bake_maps(image_size=(1024, 1024), out_filepath='//backedMaps/') -> None:
     # deselect all objects
     bpy.ops.object.select_all(action='DESELECT')
     bpy.context.view_layer.objects.active = None
-
+    selected_object_count = len(selected_object)
+    progress = 0
+    update_progress('Map baking', 0)
     # iterate over selected objects
     for object in selected_object:
         # check if object is mesh
@@ -52,18 +69,26 @@ def bake_maps(image_size=(1024, 1024), out_filepath='//backedMaps/') -> None:
                 # print(bpy.context.view_layer.objects.active)
 
                 cbs = bpy.context.scene.render.bake
-                bpy.ops.object.bake(type=bpy.context.scene.cycles.bake_type,
-                                    pass_filter=cbs.pass_filter,
-                                    margin=cbs.margin,
-                                    margin_type=cbs.margin_type,
-                                    normal_space=cbs.normal_space,
-                                    normal_r=cbs.normal_r,
-                                    normal_g=cbs.normal_g,
-                                    normal_b=cbs.normal_b)
+
+                stdout = io.StringIO()
+                with redirect_stdout(stdout):
+                    bpy.ops.object.bake(type=bpy.context.scene.cycles.bake_type,
+                                        pass_filter=cbs.pass_filter,
+                                        margin=cbs.margin,
+                                        margin_type=cbs.margin_type,
+                                        normal_space=cbs.normal_space,
+                                        normal_r=cbs.normal_r,
+                                        normal_g=cbs.normal_g,
+                                        normal_b=cbs.normal_b)
                 img.save()
 
             bpy.ops.object.select_all(action='DESELECT')
             bpy.context.view_layer.objects.active = None
+            progress += 1
+            update_progress('Map baking', progress/selected_object_count)
+    update_progress('Map baking', 1)
+    return
+
 
 # bake_maps()
 # print('==================DONNENENENEENE==================')

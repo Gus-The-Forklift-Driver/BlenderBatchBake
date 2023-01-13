@@ -35,7 +35,8 @@ class bake_maps(bpy.types.Operator):
     def execute(self, context):
         size = context.scene.BLB.image_size
         filepath = context.scene.BLB.filepath
-        light_baker.bake_maps(image_size=(size, size), out_filepath=filepath)
+        file_extension = context.scene.BLB.file_extension
+        light_baker.bake_maps(image_size=(size, size), out_filepath=filepath, file_extension=file_extension)
         return {'FINISHED'}
 
 
@@ -52,10 +53,11 @@ class interface(bpy.types.Panel):
             layout = self.layout
             scene = context.scene
             cscene = scene.cycles
-            #layout.label(text='bake lights')
+            # layout.label(text='bake lights')
 
             layout.operator('batch_light_bake.bake_maps')
             layout.prop(scene.BLB, 'filepath')
+            layout.prop(scene.BLB, 'file_extension')
 
             layout.prop(scene.cycles, 'device')
 
@@ -139,6 +141,7 @@ class BLBProperties(bpy.types.PropertyGroup):
     image_size: bpy.props.IntProperty(name='image_size', default=1024)
     filepath: bpy.props.StringProperty(
         name='filepath', default='//backedMaps/')
+    file_extension: bpy.props.StringProperty(name='file_extension', default='hdr')
 
 
 CLASSES = [

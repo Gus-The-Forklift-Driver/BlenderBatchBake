@@ -16,7 +16,7 @@ def update_progress(job_title, progress):
     sys.stdout.flush()
 
 
-def bake_maps(image_size=(1024, 1024), out_filepath='//backedMaps/') -> None:
+def bake_maps(image_size=(1024, 1024), out_filepath='//backedMaps/', file_extension='hdr') -> None:
 
     # store seleced objects
     selected_object = bpy.context.selected_objects
@@ -63,7 +63,7 @@ def bake_maps(image_size=(1024, 1024), out_filepath='//backedMaps/') -> None:
                 nodes.active = img_node
 
                 # save image
-                img.filepath = f'{out_filepath}{object.name}_{material.name}.hdr'
+                img.filepath = f'{out_filepath}{object.name}_{material.name}.{file_extension}'
                 # img.save()
                 # save and bake
                 # print(bpy.context.view_layer.objects.active)
